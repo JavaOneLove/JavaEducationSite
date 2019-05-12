@@ -11,4 +11,7 @@ public class Lecture {
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
     private Integer id;
+    private String title;
+    private String text;
+    private String author;
 }
