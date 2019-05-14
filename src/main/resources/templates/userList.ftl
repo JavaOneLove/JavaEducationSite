@@ -1,20 +1,20 @@
 <#import "macro/common.ftl" as c>
 
 <@c.page>
-List of lecture
+List of users
 
 <table>
     <thead>
     <tr>
-        <th>Title</th>
-        <th>Text</th>
+        <th>Name</th>
+        <th>Role</th>
         <th></th>
     </tr>
     </thead>
     <tbody>
-    <#list lecture as user>
+    <#list users as user>
     <tr>
-        <td>${lecture.}</td>
+        <td>${user.username}</td>
         <td><#list user.roles as role>${role}<#sep>, </#list></td>
         <td><a href="/user/${user.id}">edit</a></td>
     </tr>
