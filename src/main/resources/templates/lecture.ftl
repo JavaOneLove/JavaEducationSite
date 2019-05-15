@@ -1,12 +1,13 @@
 <#import "macro/common.ftl" as c>
 
 <@c.page>
-List of lecture
-<a href="/addLecture">Добавить лекцию</a>
-<table>
-    <thead>
-    </thead>
-    <tbody>
+<div>
+    List of lecture
+    <a href="/addLecture">Добавить лекцию</a>
+    <table>
+        <thead>
+        </thead>
+        <tbody>
     <#list lectures as lecture>
     <tr>
         <td>${lecture.title}</td>
@@ -14,6 +15,7 @@ List of lecture
         <td>${lecture.author}</td>
     </tr>
     </#list>
-    </tbody>
-</table>
+        </tbody>
+    </table>
+</div>
 </@c.page>
