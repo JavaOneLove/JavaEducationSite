@@ -1,22 +1,15 @@
 <#import "macro/common.ftl" as c>
 
 <@c.page>
-<h5>${username}</h5>
-    ${message?ifExists}
-<form method="post">
-    <div class="form-group row">
-        <label class="col-sm-2 col-form-label">Password:</label>
-        <div class="col-sm-6">
-            <input type="password" name="password" class="form-control" placeholder="Password" />
-        </div>
+<form action="/user" method="post">
+    <input type="text" name="username" value="${user.username}">
+    <#list roles as role>
+    <div>
+        <label><input type="checkbox" name="${role}" ${user.roles?seq_contains(role)?string("checked", "")}>${role}</label>
     </div>
-    <div class="form-group row">
-        <label class="col-sm-2 col-form-label">Email:</label>
-        <div class="col-sm-6">
-            <input type="email" name="email" class="form-control" placeholder="some@some.com" value="${email!''}" />
-        </div>
-    </div>
-    <input type="hidden" name="_csrf" value="${_csrf.token}" />
-    <button class="btn btn-primary" type="submit">Save</button>
+    </#list>
+    <input type="hidden" value="${user.id}" name="userId">
+    <input type="hidden" value="${_csrf.token}" name="_csrf">
+    <button type="submit">Save</button>
 </form>
 </@c.page>

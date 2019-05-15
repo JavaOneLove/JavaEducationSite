@@ -1,10 +1,17 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+<#import "macro/common.ftl" as c>
 
-</body>
-</html>
+<@c.page>
+<table>
+    <thead>
+
+    </thead>
+    <tbody>
+    <#list courses as course>
+    <tr>
+        <td>${course.title}</td>
+        <td><a href="/lecture"><input type="hidden" name="val" value="${course.id}"><button type="submit">Лекции</button></a></td>
+    </tr>
+    </#list>
+    </tbody>
+</table>
+</@c.page>

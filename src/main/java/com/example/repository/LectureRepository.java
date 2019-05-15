@@ -1,7 +1,9 @@
 package com.example.repository;
 
 import com.example.model.Lecture;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.CrudRepository;
 
-public interface LectureRepository extends JpaRepository<Lecture, Integer> {
+import java.util.List;
+
+public interface LectureRepository extends CrudRepository<Lecture, Integer> {
 }

@@ -2,21 +2,18 @@
 
 <@c.page>
 List of lecture
+<a href="/addLecture">Добавить лекцию</a>
 
 <table>
     <thead>
-    <tr>
-        <th>Title</th>
-        <th>Text</th>
-        <th></th>
-    </tr>
+
     </thead>
     <tbody>
-    <#list lecture as user>
+    <#list lectures as lecture>
     <tr>
-        <td>${lecture.}</td>
-        <td><#list user.roles as role>${role}<#sep>, </#list></td>
-        <td><a href="/user/${user.id}">edit</a></td>
+        <td>${lecture.title}</td>
+        <td>${lecture.text}</td>
+        <td>${lecture.author}</td>
     </tr>
     </#list>
     </tbody>
