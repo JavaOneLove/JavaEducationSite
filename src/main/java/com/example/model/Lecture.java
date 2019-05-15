@@ -12,11 +12,24 @@ public class Lecture {
     private String text;
     private String filename;
     private String author;
+    private Integer course_id;
 
-    public Lecture(String title, String text, String user) {
+    public Integer getCourse_id() {
+        return course_id;
+    }
+
+    public void setCourse_id(Integer course_id) {
+        this.course_id = course_id;
+    }
+    public Lecture(){
+
+    }
+
+    public Lecture(String title, String text, String user, Integer course_id) {
         this.author = user;
         this.text = text;
         this.title = title;
+        this.course_id = course_id;
     }
 
     public String getFilename() {

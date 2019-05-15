@@ -9,6 +9,7 @@ public class Course {
     private Integer id;
     private String title;
 
+
     public Integer getId() {
         return id;
     }

@@ -2,10 +2,8 @@ package com.example.controller;
 
 import com.example.model.Course;
 import com.example.model.Lecture;
-import com.example.model.LectureCourse;
 import com.example.model.User;
 import com.example.service.CourseService;
-import com.example.service.LectureCourseService;
 import com.example.service.LectureService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.Map;
 import java.util.UUID;
 
@@ -27,8 +26,6 @@ public class HomeController {
     private LectureService lectureService;
     @Autowired
     private CourseService courseService;
-    @Autowired
-    private LectureCourseService lectureCourseService;
 
     @Value("${upload.path}")
     private String uploadPath;
@@ -41,15 +38,16 @@ public class HomeController {
     @GetMapping("/lecture")
     public String lecture(Integer val, Map<String, Object> model) {
         Iterable<Lecture> lectures = lectureService.GetAllLecture();
-        Iterable<LectureCourse> lecturecourse = lectureCourseService.GetAllLectureCourse();
-        Iterable<Lecture> LecList = null;
-        for(LectureCourse lecture : lecturecourse){
-             if (lecture.getCourse().getId().equals(val) ){
-             LecList = lectures;
-                    }
-                }
-
-        model.put("lectures",LecList);
+       // Iterable<Lecture> lecList = null;
+       // for(Lecture lecture:lectures){
+        //    if (lecture.getCourse_id().equals(val) ){
+       //         lecList = Collections.singleton(lecture);
+      //      }
+      //  }
+      //  if (!lecList.equals(null)){
+       //     model.put("lectures",lecList);
+       // }
+        model.put("lectures",lectures);
         return "lecture";
     }
     @GetMapping("/addLecture")
@@ -64,9 +62,7 @@ public class HomeController {
                              @RequestParam String text,
                              @RequestParam Integer select,
                              @RequestParam("filename") MultipartFile file) throws IOException {
-        Lecture lecture = new Lecture(title, text, user.getUsername());
-       // LectureCourse lectureCourse = new LectureCourse(lecture.getId(),select);
-       // lectureCourseService.Save(lectureCourse);
+        Lecture lecture = new Lecture(title, text, user.getUsername(),select);
 
         if (file != null && !file.getOriginalFilename().isEmpty()) {
             File uploadFolder = new File(uploadPath);
