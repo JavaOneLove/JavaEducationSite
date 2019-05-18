@@ -9,7 +9,7 @@
     <#list courses as course>
     <tr>
         <td>${course.title}</td>
-        <td><a href="/lecture"><input type="hidden" name="val" value="${course.id}"><button type="submit">Лекции</button></a></td>
+        <td><a href="/course/${course.id}"><button type="submit">Лекции</button></a></td>
     </tr>
     </#list>
     </tbody>

@@ -10,15 +10,14 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Collections;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @Controller
 public class HomeController {
@@ -35,19 +34,17 @@ public class HomeController {
 
         return "home";
     }
-    @GetMapping("/lecture")
-    public String lecture(Integer val, Map<String, Object> model) {
-        Iterable<Lecture> lectures = lectureService.GetAllLecture();
-       // Iterable<Lecture> lecList = null;
-       // for(Lecture lecture:lectures){
-        //    if (lecture.getCourse_id().equals(val) ){
-       //         lecList = Collections.singleton(lecture);
-      //      }
-      //  }
-      //  if (!lecList.equals(null)){
-       //     model.put("lectures",lecList);
-       // }
-        model.put("lectures",lectures);
+    @GetMapping(value = "/course/{id}")
+    public String lecture(@PathVariable int id, Map<String, Object> model) throws NullPointerException {
+        List<Lecture> lectures = lectureService.GetAllLecture();
+        ArrayList<Lecture> lecList = new ArrayList<Lecture>();
+
+        for (Lecture lecture : lectures) {
+            if (lecture.getCourse_id().equals(id)) {
+                lecList.add(lecture);
+            }
+        }
+            model.put("lectures",lecList);
         return "lecture";
     }
     @GetMapping("/addLecture")
@@ -79,7 +76,7 @@ public class HomeController {
             lecture.setFilename(resultFilename);
         }
         lectureService.Save(lecture);
-        return "lecture";
+        return "redirect:/lecture";
     }
     @GetMapping("/course")
     public String course(Map<String,Object> model){
