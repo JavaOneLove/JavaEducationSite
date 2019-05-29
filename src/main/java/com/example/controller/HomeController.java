@@ -2,9 +2,11 @@ package com.example.controller;
 
 import com.example.model.Course;
 import com.example.model.Lecture;
+import com.example.model.QuestionAnswer;
 import com.example.model.User;
 import com.example.service.CourseService;
 import com.example.service.LectureService;
+import com.example.service.QuestionAnswerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -25,6 +27,8 @@ public class HomeController {
     private LectureService lectureService;
     @Autowired
     private CourseService courseService;
+    @Autowired
+    private QuestionAnswerService questionAnswerService;
 
     @Value("${upload.path}")
     private String uploadPath;
@@ -85,6 +89,17 @@ public class HomeController {
 
         return "course";
     }
-
+    @GetMapping("/createTest")
+    public String createTest(Map<String,Object> model){
+        return "createTest";
+    }
+    @PostMapping("/createTest")
+        public String createTest(@RequestParam String question,
+                                 @RequestParam String answer,
+                                 @RequestParam String que){
+        QuestionAnswer questionAnswer = new QuestionAnswer(answer,que);
+        questionAnswerService.Save(questionAnswer);
+        return "createTest";
+    }
 
 }
