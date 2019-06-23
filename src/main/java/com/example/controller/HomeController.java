@@ -1,20 +1,16 @@
 package com.example.controller;
 
-import com.example.model.Course;
-import com.example.model.Lecture;
-import com.example.model.QuestionAnswer;
-import com.example.model.User;
+import com.example.model.*;
 import com.example.service.CourseService;
 import com.example.service.LectureService;
 import com.example.service.QuestionAnswerService;
+import com.example.service.TestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -29,27 +25,42 @@ public class HomeController {
     private CourseService courseService;
     @Autowired
     private QuestionAnswerService questionAnswerService;
+    @Autowired
+    private TestService testService;
 
     @Value("${upload.path}")
     private String uploadPath;
 
+    private int questionVal;
+    private int questionCurseId;
+
     @GetMapping("/home")
-    public String home(@RequestParam(name="name", required=false, defaultValue="World") String name, Map<String, Object> model) {
+    public String home() {
 
         return "home";
     }
     @GetMapping(value = "/course/{id}")
     public String lecture(@PathVariable int id, Map<String, Object> model) throws NullPointerException {
         List<Lecture> lectures = lectureService.GetAllLecture();
-        ArrayList<Lecture> lecList = new ArrayList<Lecture>();
+        List<Course> courses = courseService.GetAllCourse();
+        List<Test> tests = testService.GetAllTest();
+        ArrayList<Lecture> lecList = new ArrayList<>();
 
         for (Lecture lecture : lectures) {
             if (lecture.getCourse_id().equals(id)) {
                 lecList.add(lecture);
             }
         }
+            model.put("tests",tests);
+            model.put("courses",courses);
             model.put("lectures",lecList);
         return "lecture";
+    }
+    @PostMapping("/course/{id}") // Новый метод need check
+    public String TestCreate(@RequestParam(name = "value") int value ,@RequestParam(name="select") int Curse_id){
+        questionVal = value;
+        questionCurseId = Curse_id;
+        return "redirect:/createTest";
     }
     @GetMapping("/addLecture")
     public String aLecture(Map<String,Object> model){
@@ -80,7 +91,7 @@ public class HomeController {
             lecture.setFilename(resultFilename);
         }
         lectureService.Save(lecture);
-        return "redirect:/lecture";
+        return "redirect:/course";
     }
     @GetMapping("/course")
     public String course(Map<String,Object> model){
@@ -91,15 +102,26 @@ public class HomeController {
     }
     @GetMapping("/createTest")
     public String createTest(Map<String,Object> model){
+        model.put("countQuestion",questionVal);
         return "createTest";
     }
     @PostMapping("/createTest")
-        public String createTest(@RequestParam String question,
-                                 @RequestParam String answer,
-                                 @RequestParam String que){
-        QuestionAnswer questionAnswer = new QuestionAnswer(answer,que);
-        questionAnswerService.Save(questionAnswer);
-        return "createTest";
+        public String createTest(@RequestParam(value = "question[]") String[] question,
+                                 @RequestParam(value = "answer[]") String[] answer,
+                                 @RequestParam(value = "title") String title){
+        Test test = new Test(title,questionCurseId);
+        testService.Save(test);
+            SaveTest(answer,question,test);
+
+        return "home";
+    }
+    private void SaveTest( String[] MasAns,String[] MasQue, Test test){
+            for(int i = 0; i<= questionVal-1; i++){
+                if (!MasAns[i].equals("")&& !MasQue[i].equals("")){
+                    QuestionAnswer questionAnswer = new QuestionAnswer(MasAns[i],MasQue[i],test);
+                    questionAnswerService.Save(questionAnswer);
+                }
+        }
     }
 
 }

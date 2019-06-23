@@ -1,9 +1,6 @@
 package com.example.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 public class QuestionAnswer {
@@ -13,9 +10,21 @@ public class QuestionAnswer {
     private String answer;
     private String question;
 
-    public QuestionAnswer(String answer, String question) {
+    @ManyToOne
+    private Test test;
+
+    public QuestionAnswer(String answer, String question,Test test) {
         this.answer = answer;
         this.question = question;
+        this.test = test;
+    }
+
+    public Test getTest() {
+        return test;
+    }
+
+    public void setTest(Test test) {
+        this.test = test;
     }
 
     public int getId() {
