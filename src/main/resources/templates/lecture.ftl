@@ -20,15 +20,15 @@
     <#list lectures as lecture>
     <div>
     <tr>
-        <p><td>${lecture.title}</td></p>
-        <p><td>${lecture.text}</td></p>
-        <p><td>${lecture.author}</td></p>
-        <p><td>
+        <td>${lecture.title}</td>
+        <td>${lecture.text}</td>
+        <td>${lecture.author}</td>
+        <td>
         <#if lecture.filename??>
             <img src="/img/${lecture.filename}" style="width: 50px;height: 50px">
             <a href="/img/${lecture.filename}" download="${lecture.filename}">Скачать</a>
         </#if>
-        <td></p>
+        <td>
     </tr>
     </div>
     </#list>
@@ -42,8 +42,8 @@
     <#list tests as test>
     <div>
         <tr>
-            <p><td>${test.name}</td></p>
-            <p><a>Пройти тест (Coming soon...)</a></p>
+            <td>${test.name}</td>
+            <td><a>Пройти тест (Coming soon...)</a></td>
         </tr>
     </div>
     </#list>

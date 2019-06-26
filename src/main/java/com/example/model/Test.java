@@ -10,6 +10,8 @@ public class Test {
     private String name;
     private int curse_id;
 
+    public Test(){}
+
     public Test(String title, int questionCurseId) {
         this.name = title;
         this.curse_id = questionCurseId;

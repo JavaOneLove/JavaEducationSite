@@ -56,7 +56,7 @@ public class HomeController {
             model.put("lectures",lecList);
         return "lecture";
     }
-    @PostMapping("/course/{id}") // Новый метод need check
+    @PostMapping("/course/{id}")
     public String TestCreate(@RequestParam(name = "value") int value ,@RequestParam(name="select") int Curse_id){
         questionVal = value;
         questionCurseId = Curse_id;
@@ -122,6 +122,17 @@ public class HomeController {
                     questionAnswerService.Save(questionAnswer);
                 }
         }
+    }
+    @GetMapping("/Test")
+    public String Test(Map<String,Object> model,@PathVariable int id){
+        Iterable<QuestionAnswer> questionAnswers = questionAnswerService.GetAllAnswerQuestion();
+        ArrayList<QuestionAnswer> qA = new ArrayList<>();
+        for (QuestionAnswer qa:questionAnswers) {
+                if (qa.getTest().getId().equals(id))
+                    qA.add(qa);
+        }
+        model.put("AnswerList",qA);
+        return "Test";
     }
 
 }
