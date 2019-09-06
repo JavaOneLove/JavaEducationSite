@@ -7,7 +7,6 @@ import com.example.service.QuestionAnswerService;
 import com.example.service.TestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -31,7 +30,6 @@ public class HomeController {
     @Value("${upload.path}")
     private String uploadPath;
 
-    private int questionVal;
     private int questionCurseId;
 
     @GetMapping("/home")
@@ -57,8 +55,7 @@ public class HomeController {
         return "lecture";
     }
     @PostMapping("/course/{id}")
-    public String TestCreate(@RequestParam(name = "value") int value ,@RequestParam(name="select") int Curse_id){
-        questionVal = value;
+    public String TestCreate(@RequestParam(name="select") int Curse_id){
         questionCurseId = Curse_id;
         return "redirect:/createTest";
     }
@@ -102,28 +99,28 @@ public class HomeController {
     }
     @GetMapping("/createTest")
     public String createTest(Map<String,Object> model){
-        model.put("countQuestion",questionVal);
         return "createTest";
     }
     @PostMapping("/createTest")
-        public String createTest(@RequestParam(value = "question[]") String[] question,
+        public String createTest(@RequestParam(value = "Count") String count,
+                                 @RequestParam(value = "question[]") String[] question,
                                  @RequestParam(value = "answer[]") String[] answer,
                                  @RequestParam(value = "title") String title){
         Test test = new Test(title,questionCurseId);
         testService.Save(test);
-            SaveTest(answer,question,test);
+            SaveTest(answer,question,test,count);
 
         return "home";
     }
-    private void SaveTest( String[] MasAns,String[] MasQue, Test test){
-            for(int i = 0; i<= questionVal-1; i++){
+    private void SaveTest( String[] MasAns,String[] MasQue, Test test, String questionVal){
+            for(int i = 0; i<= Integer.parseInt(questionVal) - 1; i++){
                 if (!MasAns[i].equals("")&& !MasQue[i].equals("")){
                     QuestionAnswer questionAnswer = new QuestionAnswer(MasAns[i],MasQue[i],test);
                     questionAnswerService.Save(questionAnswer);
                 }
         }
     }
-    @GetMapping("/Test")
+    @GetMapping("/test/{id}")
     public String Test(Map<String,Object> model,@PathVariable int id){
         Iterable<QuestionAnswer> questionAnswers = questionAnswerService.GetAllAnswerQuestion();
         ArrayList<QuestionAnswer> qA = new ArrayList<>();
@@ -132,7 +129,11 @@ public class HomeController {
                     qA.add(qa);
         }
         model.put("AnswerList",qA);
-        return "Test";
+        return "test";
+    }
+    @GetMapping("/PassTest")
+    public String PassTest(){
+        return "PassTest";
     }
 
 }

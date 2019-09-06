@@ -13,6 +13,8 @@ public class QuestionAnswer {
     @ManyToOne
     private Test test;
 
+    public QuestionAnswer() { }
+
     public QuestionAnswer(String answer, String question,Test test) {
         this.answer = answer;
         this.question = question;

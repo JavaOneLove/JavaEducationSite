@@ -1,16 +1,15 @@
 <#import "macro/common.ftl" as c>
 
 <@c.page>
-    <form  method="post" style="border-style: solid">
-       <p><input name="value" type="number">Кол-во вопросов</input></p>
-        <select name="select">
+<form  method="post">
+    <select name="select">
         <#list courses as course>
             <option value="${course.id}">${course.title}</option>
         </#list>
-        </select>
-       <a href="/createTest"><button class="btn btn-success" type="submit">Создать тест</button></a>
-        <input type="hidden" name="_csrf" value="${_csrf.token}" />
-    </form>
+    </select>
+    <a href="/createTest"><button class="btn btn-success" type="submit">Создать тест</button></a>
+    <input type="hidden" name="_csrf" value="${_csrf.token}" />
+</form>
     List of lecture
     <a href="/addLecture">Добавить лекцию</a>
     <table>
@@ -43,7 +42,7 @@
     <div>
         <tr>
             <td>${test.name}</td>
-            <td><a>Пройти тест (Coming soon...)</a></td>
+            <td><a href="/test/${test.id}">Пройти</a></td>
         </tr>
     </div>
     </#list>
