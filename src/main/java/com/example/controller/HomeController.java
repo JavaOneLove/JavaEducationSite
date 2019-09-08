@@ -1,10 +1,7 @@
 package com.example.controller;
 
 import com.example.model.*;
-import com.example.service.CourseService;
-import com.example.service.LectureService;
-import com.example.service.QuestionAnswerService;
-import com.example.service.TestService;
+import com.example.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -16,8 +13,12 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
+import static org.aspectj.runtime.internal.Conversions.intValue;
+
 @Controller
 public class HomeController {
+    @Autowired
+    private MarkService markService;
     @Autowired
     private LectureService lectureService;
     @Autowired
@@ -33,8 +34,8 @@ public class HomeController {
     private int questionCurseId;
 
     @GetMapping("/home")
-    public String home() {
-
+    public String home(Map<String,Object> model,@AuthenticationPrincipal User user) {
+            model.put("User",user);
         return "home";
     }
     @GetMapping(value = "/course/{id}")
@@ -131,9 +132,28 @@ public class HomeController {
         model.put("AnswerList",qA);
         return "test";
     }
-    @GetMapping("/PassTest")
-    public String PassTest(){
-        return "PassTest";
+    @PostMapping("/test/{id}")
+    public String PassTest(@AuthenticationPrincipal User user,
+                           @RequestParam(value = "answer[]") String[] answer,
+                           @RequestParam( value = "AnswerList") ArrayList<QuestionAnswer> ans,
+                           @PathVariable int id){
+        String[] AnswerMassive = new String[answer.length];
+        int i = 0;
+        for(QuestionAnswer qa:ans){
+           AnswerMassive[i] = qa.getAnswer();
+            i++;
+        }
+        Mark mark = new Mark(intValue(CheckTest(answer,AnswerMassive)),user,testService.GetAllTest().get(id));
+        return "test";
     }
-
+    private double CheckTest(String[] ArrayAnswer, String[] ans){
+        int pass = 0;
+        for(int i = 0; i < ans.length;i++){
+            if (ArrayAnswer[i].toLowerCase().equals(ans[i].toLowerCase())){
+                pass ++;
+            }
+        }
+        double mark = (pass * 100) / ans.length;
+        return mark;
+    }
 }

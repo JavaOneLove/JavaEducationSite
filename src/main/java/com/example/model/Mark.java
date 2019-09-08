@@ -16,6 +16,15 @@ public class Mark {
         return id;
     }
 
+    public Mark() {
+    }
+
+    public Mark(int value,User user,Test test) {
+        this.value = value;
+        this.test = test;
+        this.user = user;
+    }
+
     public void setId(int id) {
         this.id = id;
     }
@@ -44,5 +53,6 @@ public class Mark {
         this.test = test;
     }
 
-    @ManyToOne Test test;
+    @ManyToOne
+    private Test test;
 }
