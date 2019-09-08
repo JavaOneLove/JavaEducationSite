@@ -44,13 +44,18 @@ public class HomeController {
         List<Course> courses = courseService.GetAllCourse();
         List<Test> tests = testService.GetAllTest();
         ArrayList<Lecture> lecList = new ArrayList<>();
-
+        ArrayList<Test> testList = new ArrayList<>();
         for (Lecture lecture : lectures) {
             if (lecture.getCourse_id().equals(id)) {
                 lecList.add(lecture);
             }
         }
-            model.put("tests",tests);
+        for(Test test:tests){
+            if(test.getCurse_id().equals(id)){
+                testList.add(test);
+            }
+        }
+            model.put("tests",testList);
             model.put("courses",courses);
             model.put("lectures",lecList);
         return "lecture";
@@ -135,16 +140,18 @@ public class HomeController {
     @PostMapping("/test/{id}")
     public String PassTest(@AuthenticationPrincipal User user,
                            @RequestParam(value = "answer[]") String[] answer,
-                           @RequestParam( value = "AnswerList") ArrayList<QuestionAnswer> ans,
                            @PathVariable int id){
+        Iterable<QuestionAnswer> questionAnswers = questionAnswerService.GetAllAnswerQuestion();
         String[] AnswerMassive = new String[answer.length];
         int i = 0;
-        for(QuestionAnswer qa:ans){
-           AnswerMassive[i] = qa.getAnswer();
+        for (QuestionAnswer qa:questionAnswers) {
+            if (qa.getTest().getId().equals(id))
+                AnswerMassive[i] = qa.getAnswer();
             i++;
         }
         Mark mark = new Mark(intValue(CheckTest(answer,AnswerMassive)),user,testService.GetAllTest().get(id));
-        return "test";
+        markService.Save(mark);
+        return "home";
     }
     private double CheckTest(String[] ArrayAnswer, String[] ans){
         int pass = 0;

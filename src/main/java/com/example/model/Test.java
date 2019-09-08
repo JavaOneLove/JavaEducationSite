@@ -33,7 +33,7 @@ public class Test {
         this.name = name;
     }
 
-    public int getCurse_id() {
+    public Integer getCurse_id() {
         return curse_id;
     }
 
