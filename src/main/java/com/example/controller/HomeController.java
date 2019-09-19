@@ -13,7 +13,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
-import static org.aspectj.runtime.internal.Conversions.intValue;
 
 @Controller
 public class HomeController {
@@ -140,27 +139,22 @@ public class HomeController {
     @PostMapping("/test/{id}")
     public String PassTest(@AuthenticationPrincipal User user,
                            @RequestParam(value = "answer[]") String[] answer,
+                           @RequestParam(value = "count") int count,
                            @PathVariable int id){
         Iterable<QuestionAnswer> questionAnswers = questionAnswerService.GetAllAnswerQuestion();
-        String[] AnswerMassive = new String[answer.length];
         int i = 0;
-        for (QuestionAnswer qa:questionAnswers) {
-            if (qa.getTest().getId().equals(id))
-                AnswerMassive[i] = qa.getAnswer();
-            i++;
-        }
-        Mark mark = new Mark(intValue(CheckTest(answer,AnswerMassive)),user,testService.GetAllTest().get(id));
-        markService.Save(mark);
-        return "home";
-    }
-    private double CheckTest(String[] ArrayAnswer, String[] ans){
         int pass = 0;
-        for(int i = 0; i < ans.length;i++){
-            if (ArrayAnswer[i].toLowerCase().equals(ans[i].toLowerCase())){
-                pass ++;
+        for (QuestionAnswer qa:questionAnswers) {
+            if (qa.getTest().getId().equals(id)) {
+                if (qa.getAnswer().equals(answer[i])) {
+                    pass++;
+                }
+           i++;
             }
         }
-        double mark = (pass * 100) / ans.length;
-        return mark;
+        int rating = (pass / 100) * count;
+        Mark mark = new Mark(rating,user,testService.GetTestById(id));
+        markService.Save(mark);
+        return "home";
     }
 }

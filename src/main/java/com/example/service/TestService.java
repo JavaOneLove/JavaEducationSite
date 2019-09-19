@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TestService {
@@ -20,5 +21,9 @@ public class TestService {
     }
     public void Save(Test test) {
         testRepository.save(test);
+    }
+    public Test GetTestById(int id){
+        Optional<Test> optionalTest = testRepository.findById(id);
+        return optionalTest.get();
     }
 }
