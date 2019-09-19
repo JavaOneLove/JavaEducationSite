@@ -8,8 +8,8 @@
     <tbody>
     <#list courses as course>
     <tr>
-        <td>${course.title}</td>
-        <td><a href="/course/${course.id}"><button type="submit">Лекции</button></a></td>
+        <td style="padding-bottom: 10px;padding-left: 10px"><a href="/course/${course.id}"><button class="btn btn-outline-primary" type="submit">Лекции</button></a></td>
+        <td >${course.title}</td>
     </tr>
     </#list>
     </tbody>

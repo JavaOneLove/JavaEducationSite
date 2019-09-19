@@ -33,8 +33,7 @@ public class HomeController {
     private int questionCurseId;
 
     @GetMapping("/home")
-    public String home(Map<String,Object> model,@AuthenticationPrincipal User user) {
-            model.put("User",user);
+    public String home(Map<String,Object> model) {
         return "home";
     }
     @GetMapping(value = "/course/{id}")
@@ -152,7 +151,7 @@ public class HomeController {
            i++;
             }
         }
-        int rating = (pass / 100) * count;
+        int rating = (count / pass) * 100;
         Mark mark = new Mark(rating,user,testService.GetTestById(id));
         markService.Save(mark);
         return "home";

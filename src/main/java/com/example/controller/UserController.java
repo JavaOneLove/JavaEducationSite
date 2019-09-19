@@ -1,17 +1,21 @@
 package com.example.controller;
 
 
+import com.example.model.Mark;
 import com.example.model.Role;
 import com.example.model.User;
 import com.example.repository.UserRepository;
+import com.example.service.MarkService;
 import com.example.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -23,7 +27,9 @@ public class UserController {
    private UserRepository userRepository;
     @Autowired
     private UserService userSevice;
-
+    @Autowired
+    private MarkService markService;
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping
     public String userList(Model model){
         model.addAttribute("users", userRepository.findAll());
@@ -31,9 +37,11 @@ public class UserController {
     }
 
     @GetMapping("profile")
-    public String getProfile(Model model, @AuthenticationPrincipal User user) {
+    public String getProfile(Model model,Map<String,Object> models, @AuthenticationPrincipal User user) {
         model.addAttribute("username", user.getUsername());
         model.addAttribute("email", user.getEmail());
+        List<Mark> marks = markService.GetAllMark();
+        models.put("marks",marks);
 
         return "profile";
     }
@@ -49,6 +57,7 @@ public class UserController {
 
         return "redirect:/home";
     }
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("{user}")
     public String userEditForm(@PathVariable User user, Model model) {
         model.addAttribute("user", user);

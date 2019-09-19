@@ -20,12 +20,18 @@
             <li class="nav-item">
                 <a class="nav-link" href="/user/profile">Личный кабинет</a>
             </li>
+            <#if isTeacher>
             <li class="nav-item">
                 <a class="nav-link" href="/createTest">Создать тест</a>
             </li>
+            </#if>
         </ul>
 
         <div class="navbar-text mr-3">${name}</div>
-        <@l.logout />
+        <#if known>
+            <div class="form-inline">
+                <@l.logout/>
+            </div>
+        </#if>
     </div>
 </nav>

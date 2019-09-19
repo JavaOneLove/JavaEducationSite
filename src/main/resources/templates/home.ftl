@@ -1,8 +1,12 @@
 <#import "macro/common.ftl" as c>
 
 <@c.page>
-<div>Hello, user</div>
-<a href="/user">Main page</a>
-<a href="/user/profile">Profile</a>
-<a href="/course">Курсы</a>
+<div>
+
+<h2>Для каждого студента.</h2>
+    <h2>Каждая лекция.</h2>
+        <h2>Реальные результаты.</h2>
+    </div>
+<div>
+</div>
 </@c.page>
