@@ -9,6 +9,12 @@ public class Course {
     private Integer id;
     private String title;
 
+    public Course() {
+    }
+
+    public Course(String title) {
+        this.title = title;
+    }
 
     public Integer getId() {
         return id;

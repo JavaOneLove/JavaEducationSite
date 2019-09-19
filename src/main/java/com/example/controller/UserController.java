@@ -1,10 +1,12 @@
 package com.example.controller;
 
 
+import com.example.model.Course;
 import com.example.model.Mark;
 import com.example.model.Role;
 import com.example.model.User;
 import com.example.repository.UserRepository;
+import com.example.service.CourseService;
 import com.example.service.MarkService;
 import com.example.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +31,8 @@ public class UserController {
     private UserService userSevice;
     @Autowired
     private MarkService markService;
+    @Autowired
+    private CourseService courseService;
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping
     public String userList(Model model){
@@ -46,7 +50,7 @@ public class UserController {
         return "profile";
     }
 
-    @PostMapping("profile")
+    @PostMapping("EditInfo")
     public String updateProfile(
             @AuthenticationPrincipal User user,
             @RequestParam String password,
@@ -55,6 +59,12 @@ public class UserController {
     ) {
         userSevice.updateProfile(user, password, email, username);
 
+        return "redirect:/home";
+    }
+    @PostMapping("profile/AddCourse")
+    public String AddCourse(@RequestParam(value = "coursename") String coursename){
+        Course course = new Course(coursename);
+        courseService.Save(course);
         return "redirect:/home";
     }
     @PreAuthorize("hasAuthority('ADMIN')")

@@ -18,4 +18,7 @@ public class CourseService {
         courseRepository.findAll().forEach(e -> list.add(e));
         return list;
     }
+    public void Save(Course course) {
+        courseRepository.save(course);
+    }
 }

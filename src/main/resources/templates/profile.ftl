@@ -4,7 +4,7 @@
 <@c.page>
 <h5>${username}</h5>
     ${message?ifExists}
-<form method="post">
+<form method="post" action="/user/EditInfo">
     <div class="form-group row">
         <label class="col-sm-2 col-form-label">Username:</label>
         <div class="col-sm-6">
@@ -26,9 +26,9 @@
     <input type="hidden" name="_csrf" value="${_csrf.token}" />
     <button class="btn btn-primary" type="submit">Save</button>
 </form>
-<#if isUser>
+<#if isStudent>
     <div style="margin: 20px">
-        <h6>Оценки по тестам:</h6><p></p>
+        <h5>Оценки по тестам:</h5><p></p>
 <div>
     <table>
         <thead>
@@ -51,5 +51,15 @@
     </table>
 </div>
     </div>
+</#if>
+<#if isAdmin>
+<form name="AddCourse" method="post" action="/user/profile/AddCourse">
+<div>
+    <h4>Добавить курс</h4>
+    <input type="text" name="coursename" placeholder="Введите название курса">
+    <button type="submit" class="btn btn-outline-dark">Добавить</button>
+    <input type="hidden" name="_csrf" value="${_csrf.token}">
+</div>
+</form>
 </#if>
 </@c.page>
