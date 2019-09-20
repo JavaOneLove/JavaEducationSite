@@ -2,7 +2,7 @@
 <#import "macro/login.ftl" as l>
 
 <@c.page>
-<h3 style="margin: 10px">Registration a new user</h3>
+<h3 style="margin: 10px">Зарегестрироваться</h3>
     ${message?ifExists}
     <@l.login "/registration" />
 </@c.page>

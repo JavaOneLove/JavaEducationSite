@@ -145,13 +145,16 @@ public class HomeController {
         int pass = 0;
         for (QuestionAnswer qa:questionAnswers) {
             if (qa.getTest().getId().equals(id)) {
-                if (qa.getAnswer().equals(answer[i])) {
+                if (qa.getAnswer().equalsIgnoreCase(answer[i])) {
                     pass++;
                 }
            i++;
             }
         }
-        int rating = (count / pass) * 100;
+        int rating = 0;
+        if (pass !=  0) {
+            rating = (100 * pass) / count;
+        }
         Mark mark = new Mark(rating,user,testService.GetTestById(id));
         markService.Save(mark);
         return "home";

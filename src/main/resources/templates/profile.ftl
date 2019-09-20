@@ -2,8 +2,10 @@
 <#import "macro/common.ftl" as c>
 
 <@c.page>
-<h5>${username}</h5>
+<h5 style="padding-left: 30px">${username}</h5>
     ${message?ifExists}
+<div class="row" style="margin:10px 10px; ">
+<div class="col-sm-8">
 <form method="post" action="/user/EditInfo">
     <div class="form-group row">
         <label class="col-sm-2 col-form-label">Username:</label>
@@ -26,12 +28,26 @@
     <input type="hidden" name="_csrf" value="${_csrf.token}" />
     <button class="btn btn-primary" type="submit">Save</button>
 </form>
+    </div>
+<div class="col-sm-2">
+    <#if isAdmin>
+        <form name="AddCourse" method="post" action="/user/profile/AddCourse">
+            <div>
+                <h5>Добавить курс</h5>
+                <input type="text" name="coursename" placeholder="Введите название курса">
+                <button style="margin: 10px" type="submit" class="btn btn-outline-dark">Добавить</button>
+                <input type="hidden" name="_csrf" value="${_csrf.token}">
+            </div>
+        </form>
+    </div>
+    </div>
+    </#if>
 <#if isStudent>
     <div style="margin: 20px">
         <h5>Оценки по тестам:</h5><p></p>
 <div>
-    <table>
-        <thead>
+    <table class="table">
+        <thead class="thead-dark">
         <tr>
             <th>Название теста</th>
             <th>Оценка</th>
@@ -51,15 +67,5 @@
     </table>
 </div>
     </div>
-</#if>
-<#if isAdmin>
-<form name="AddCourse" method="post" action="/user/profile/AddCourse">
-<div>
-    <h4>Добавить курс</h4>
-    <input type="text" name="coursename" placeholder="Введите название курса">
-    <button type="submit" class="btn btn-outline-dark">Добавить</button>
-    <input type="hidden" name="_csrf" value="${_csrf.token}">
-</div>
-</form>
 </#if>
 </@c.page>

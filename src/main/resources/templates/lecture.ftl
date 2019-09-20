@@ -2,7 +2,7 @@
 
 <@c.page>
 <form  method="post">
-    <select name="select">
+    <select name="select" class="custom-select mr-sm-2">
         <#list courses as course>
             <option value="${course.id}">${course.title}</option>
         </#list>
@@ -10,19 +10,19 @@
     <a href="/createTest"><button class="btn btn-success" type="submit">Создать тест</button></a>
     <input type="hidden" name="_csrf" value="${_csrf.token}" />
 </form>
-    List of lecture
+    <h3>Лекции</h3>
     <a href="/addLecture">Добавить лекцию</a>
-    <table>
+    <table class="table">
         <thead>
         </thead>
         <tbody>
     <#list lectures as lecture>
     <div>
     <tr>
-        <td>${lecture.title}</td>
-        <td>${lecture.text}</td>
-        <td>${lecture.author}</td>
-        <td>
+        <td class="table-primary">${lecture.title}</td>
+        <td class="table-primary">${lecture.text}</td>
+        <td class="table-primary">${lecture.author}</td>
+        <td class="table-primary">
         <#if lecture.filename??>
             <img src="/img/${lecture.filename}" style="width: 50px;height: 50px">
             <a href="/img/${lecture.filename}" download="${lecture.filename}">Скачать</a>
@@ -33,8 +33,8 @@
     </#list>
         </tbody>
     </table>
-    List of test
-    <table>
+    <h3>Тесты</h3>
+    <table class="table">
         <thead>
         </thead>
         <tbody>
