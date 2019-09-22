@@ -30,11 +30,11 @@ public class HomeController {
     @Value("${upload.path}")
     private String uploadPath;
 
-    private int questionCurseId;
-
-    @GetMapping("/home")
+    @GetMapping("/")
     public String home(Map<String,Object> model) {
-        return "home";
+        List<Course> courses = courseService.GetAllCourse();
+        model.put("courses",courses);
+        return "/home";
     }
     @GetMapping(value = "/course/{id}")
     public String lecture(@PathVariable int id, Map<String, Object> model) throws NullPointerException {
@@ -57,11 +57,6 @@ public class HomeController {
             model.put("courses",courses);
             model.put("lectures",lecList);
         return "lecture";
-    }
-    @PostMapping("/course/{id}")
-    public String TestCreate(@RequestParam(name="select") int Curse_id){
-        questionCurseId = Curse_id;
-        return "redirect:/createTest";
     }
     @GetMapping("/addLecture")
     public String aLecture(Map<String,Object> model){
@@ -101,20 +96,23 @@ public class HomeController {
 
         return "course";
     }
-    @GetMapping("/createTest")
+    @GetMapping("/createTest/{id}")
     public String createTest(Map<String,Object> model){
-        return "createTest";
+        List<Course> courses = courseService.GetAllCourse();
+        model.put("courses",courses);
+        return "/createTest";
     }
-    @PostMapping("/createTest")
+    @PostMapping("/createTest/{id}")
         public String createTest(@RequestParam(value = "Count") String count,
                                  @RequestParam(value = "question[]") String[] question,
                                  @RequestParam(value = "answer[]") String[] answer,
-                                 @RequestParam(value = "title") String title){
-        Test test = new Test(title,questionCurseId);
+                                 @RequestParam(value = "title") String title,
+                                 @PathVariable int id){
+        Test test = new Test(title,id);
         testService.Save(test);
             SaveTest(answer,question,test,count);
 
-        return "home";
+        return "redirect:/";
     }
     private void SaveTest( String[] MasAns,String[] MasQue, Test test, String questionVal){
             for(int i = 0; i<= Integer.parseInt(questionVal) - 1; i++){
@@ -127,12 +125,14 @@ public class HomeController {
     @GetMapping("/test/{id}")
     public String Test(Map<String,Object> model,@PathVariable int id){
         Iterable<QuestionAnswer> questionAnswers = questionAnswerService.GetAllAnswerQuestion();
+        List<Course> courses = courseService.GetAllCourse();
         ArrayList<QuestionAnswer> qA = new ArrayList<>();
         for (QuestionAnswer qa:questionAnswers) {
                 if (qa.getTest().getId().equals(id))
                     qA.add(qa);
         }
         model.put("AnswerList",qA);
+        model.put("courses",courses);
         return "test";
     }
     @PostMapping("/test/{id}")
@@ -157,6 +157,6 @@ public class HomeController {
         }
         Mark mark = new Mark(rating,user,testService.GetTestById(id));
         markService.Save(mark);
-        return "home";
-    }
+        return "redirect:/";
+        }
 }

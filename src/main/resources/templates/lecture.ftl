@@ -1,19 +1,16 @@
 <#import "macro/common.ftl" as c>
 
 <@c.page>
-<form  method="post">
-    <select name="select" class="custom-select mr-sm-2">
-        <#list courses as course>
-            <option value="${course.id}">${course.title}</option>
-        </#list>
-    </select>
-    <a href="/createTest"><button class="btn btn-success" type="submit">Создать тест</button></a>
-    <input type="hidden" name="_csrf" value="${_csrf.token}" />
-</form>
     <h3>Лекции</h3>
     <a href="/addLecture">Добавить лекцию</a>
     <table class="table">
-        <thead>
+        <thead class="thead-dark">
+        <tr>
+            <th>Название</th>
+            <th>Описание</th>
+            <th>Автор</th>
+            <th></th>
+        </tr>
         </thead>
         <tbody>
     <#list lectures as lecture>
@@ -35,7 +32,11 @@
     </table>
     <h3>Тесты</h3>
     <table class="table">
-        <thead>
+        <thead class="thead-dark">
+        <tr>
+        <th>Название</th>
+        <th></th>
+        </tr>
         </thead>
         <tbody>
     <#list tests as test>

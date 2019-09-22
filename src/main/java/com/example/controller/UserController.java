@@ -35,8 +35,10 @@ public class UserController {
     private CourseService courseService;
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping
-    public String userList(Model model){
+    public String userList(Model model,Map<String,Object> models){
         model.addAttribute("users", userRepository.findAll());
+        List<Course> courses = courseService.GetAllCourse();
+        models.put("courses",courses);
         return "userList";
     }
 
@@ -45,8 +47,9 @@ public class UserController {
         model.addAttribute("username", user.getUsername());
         model.addAttribute("email", user.getEmail());
         List<Mark> marks = markService.GetAllMark();
+        List<Course> courses = courseService.GetAllCourse();
+        models.put("courses",courses);
         models.put("marks",marks);
-
         return "profile";
     }
 
@@ -65,13 +68,15 @@ public class UserController {
     public String AddCourse(@RequestParam(value = "coursename") String coursename){
         Course course = new Course(coursename);
         courseService.Save(course);
-        return "redirect:/home";
+        return "redirect:/";
     }
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("{user}")
-    public String userEditForm(@PathVariable User user, Model model) {
+    public String userEditForm(@PathVariable User user, Model model,Map<String,Object> models) {
         model.addAttribute("user", user);
         model.addAttribute("roles", Role.values());
+        List<Course> courses = courseService.GetAllCourse();
+        models.put("courses",courses);
         return "userEdit";
     }
     @PostMapping
