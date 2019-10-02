@@ -1,6 +1,7 @@
 package com.example.model;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 public class Test {
@@ -40,5 +41,15 @@ public class Test {
     public void setCurse_id(int curse_id) {
         this.curse_id = curse_id;
     }
+
+    public List<Mark> getMark() {
+        return mark;
+    }
+
+    public void setMark(List<Mark> mark) {
+        this.mark = mark;
+    }
+    @OneToMany
+    private List<Mark> mark;
 
 }

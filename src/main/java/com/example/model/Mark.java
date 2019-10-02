@@ -9,6 +9,16 @@ public class Mark {
     private int id;
     private int value;
 
+
+    public int getIdtest() {
+        return Idtest;
+    }
+
+    public void setIdtest(int idtest) {
+        Idtest = idtest;
+    }
+
+    private int Idtest;
     @ManyToOne
     private User user;
 
@@ -19,10 +29,11 @@ public class Mark {
     public Mark() {
     }
 
-    public Mark(int value,User user,Test test) {
+    public Mark(int value,User user,Test test,int Idtest) {
         this.value = value;
         this.test = test;
         this.user = user;
+        this.Idtest = Idtest;
     }
 
     public void setId(int id) {

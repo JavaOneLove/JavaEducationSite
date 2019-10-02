@@ -21,4 +21,7 @@ public class CourseService {
     public void Save(Course course) {
         courseRepository.save(course);
     }
+    public Course GetCourseById(int id){
+       return courseRepository.findById(id).get();
+    }
 }

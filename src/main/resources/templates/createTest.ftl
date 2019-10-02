@@ -43,6 +43,7 @@
         i--;
     }
 </script>
+<h4>${course}</h4>
   <form name="form1" method="post" enctype="multipart/form-data">
       <p><input type="text" name="title" placeholder="Название теста"/></p>
       <input type="button" onclick="AddElement();" value="Добавить вопрос">

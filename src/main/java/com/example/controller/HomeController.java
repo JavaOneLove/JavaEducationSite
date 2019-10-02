@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -37,9 +38,12 @@ public class HomeController {
         return "/home";
     }
     @GetMapping(value = "/course/{id}")
-    public String lecture(@PathVariable int id, Map<String, Object> model) throws NullPointerException {
+    public String lecture(@PathVariable int id,
+                          Map<String, Object> model,
+                          @AuthenticationPrincipal User user) throws NullPointerException {
         List<Lecture> lectures = lectureService.GetAllLecture();
         List<Course> courses = courseService.GetAllCourse();
+        List<Mark> marks = markService.GetAllMark();
         List<Test> tests = testService.GetAllTest();
         ArrayList<Lecture> lecList = new ArrayList<>();
         ArrayList<Test> testList = new ArrayList<>();
@@ -49,8 +53,11 @@ public class HomeController {
             }
         }
         for(Test test:tests){
-            if(test.getCurse_id().equals(id)){
-                testList.add(test);
+            for(Mark mark:marks) {
+            if(test.getCurse_id().equals(id) ){
+                    if(mark.getIdtest() == test.getId() && mark.getUser() == user)
+                    testList.add(test);
+                }
             }
         }
             model.put("tests",testList);
@@ -97,8 +104,9 @@ public class HomeController {
         return "course";
     }
     @GetMapping("/createTest/{id}")
-    public String createTest(Map<String,Object> model){
+    public String createTest(Map<String,Object> model, @PathVariable int id, Model models){
         List<Course> courses = courseService.GetAllCourse();
+        models.addAttribute("course",courseService.GetCourseById(id).getTitle());
         model.put("courses",courses);
         return "/createTest";
     }
@@ -155,7 +163,7 @@ public class HomeController {
         if (pass !=  0) {
             rating = (100 * pass) / count;
         }
-        Mark mark = new Mark(rating,user,testService.GetTestById(id));
+        Mark mark = new Mark(rating,user,testService.GetTestById(id),id);
         markService.Save(mark);
         return "redirect:/";
         }
